@@ -1,0 +1,31 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // Gunakan sqlite biar cepat & file-based (mudah didemo), atau ganti 'mysql' jika wajib.
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+}
+
+model Category {
+  id       Int       @id @default(autoincrement())
+  name     String
+  products Product[] // Relasi One to Many
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       Int
+  description String?
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
+}
